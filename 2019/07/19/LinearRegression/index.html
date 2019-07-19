@@ -7,19 +7,19 @@
 
 
 
-    <meta name="description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+    <meta name="description" content="线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^">
 <meta name="keywords" content="machine-learning,python, math">
 <meta property="og:type" content="article">
 <meta property="og:title" content="线性回归，岭回归和Lasso回归">
 <meta property="og:url" content="http://www.motifsing.com/2019/07/19/LinearRegression/index.html">
 <meta property="og:site_name" content="Motifsing">
-<meta property="og:description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+<meta property="og:description" content="线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://www.motifsing.com/images/og_image.png">
-<meta property="og:updated_time" content="2019-07-19T15:38:07.515Z">
+<meta property="og:updated_time" content="2019-07-19T16:17:28.867Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="线性回归，岭回归和Lasso回归">
-<meta name="twitter:description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+<meta name="twitter:description" content="线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^">
 <meta name="twitter:image" content="http://www.motifsing.com/images/og_image.png">
 
 
@@ -156,7 +156,7 @@
                 <span class="level-item has-text-grey">
                     
                     
-                    16 分钟 读完 (大约 2415 个字)
+                    16 分钟 读完 (大约 2416 个字)
                 </span>
                 
                 
@@ -169,10 +169,11 @@
             
         </h1>
         <div class="content">
-            <p># </p>
-<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><h4 id="线性回归的一般形式"><a href="#线性回归的一般形式" class="headerlink" title="线性回归的一般形式"></a>线性回归的一般形式</h4><p>$$<br>\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx<br>\qquad<br>$$</p>
+            <h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><h4 id="线性回归的一般形式"><a href="#线性回归的一般形式" class="headerlink" title="线性回归的一般形式"></a>线性回归的一般形式</h4><p>$$<br>\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx<br>\qquad<br>$$</p>
 <p>$$<br>损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^2<br>$$</p>
 <p>$$<br>目标: 求minJ(\theta_0,\theta_1,\dots,\theta_n)时的\theta 值<br>$$</p>
+<a id="more"></a>
+
 <h4 id="梯度下降法求解"><a href="#梯度下降法求解" class="headerlink" title="梯度下降法求解"></a>梯度下降法求解</h4><p>$$<br>\begin{alignedat}{2}<br>    \frac{\partial}{\partial\theta_j}J(\theta)=<br>    \frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^2\quad\<br>    =\frac{1}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)<br>    \frac{\partial}{\partial\theta_j}(\theta^Tx)\<br>    =\frac{1}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{x_j^{(i)}}\qquad</p>
 <p>\end{alignedat}<br>$$</p>
 <p>$$<br>\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta) \qquad (\alpha{为学习率})\qquad\qquad\qquad\<br>=\theta_j - \frac{\alpha}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{x_j^{(i)}} \qquad(1)<br>$$</p>
