@@ -149,51 +149,6 @@
                 <time class="level-item has-text-grey" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time>
                 
                 <div class="level-item">
-                <a class="has-link-grey -link" href="/categories/linux/">linux</a>
-                </div>
-                
-                
-                <span class="level-item has-text-grey">
-                    
-                    
-                    1 分钟 读完 (大约 180 个字)
-                </span>
-                
-                
-            </div>
-        </div>
-        
-        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
-            
-                <a class="has-link-black-ter" href="/2019/07/19/linux升级Python/">Linux升级Python</a>
-            
-        </h1>
-        <div class="content">
-            <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep java</span><br><span class="line"></span><br><span class="line">rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.65-3.b17.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.8.0-openjdk-1.8.0.65-3.b17.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line"></span><br><span class="line">#安装依赖包</span><br><span class="line">yum group install &apos;Development Tools&apos;</span><br><span class="line">yum install gcc-c++ gcc make cmake zlib-devel bzip2-devel openssl-devel ncurse-devel -y</span><br><span class="line"></span><br><span class="line">./configure --prefix=/usr/local/python3 --enable-optimizations</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">mv /usr/bin/python /usr/bin/python.bak</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/python3/bin/python3.7 /usr/bin/python</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</span><br><span class="line"></span><br><span class="line">mkdir ~/.pip</span><br><span class="line"></span><br><span class="line">vim ~/.pip/pip.conf</span><br><span class="line"></span><br><span class="line">[global]  </span><br><span class="line">timeout = 6000  </span><br><span class="line">index-url = http://pypi.douban.com/simple/  </span><br><span class="line">[install]  </span><br><span class="line">use-mirrors = true  </span><br><span class="line">mirrors = http://pypi.douban.com/simple/  </span><br><span class="line">trusted-host = pypi.douban.com</span><br><span class="line"></span><br><span class="line">#修改yum</span><br><span class="line">vim /usr/bin/yum</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line">vim /usr/bin/yum-config-manager</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line">vim /usr/libexec/urlgrabber-ext-down</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line"></span><br><span class="line">pip install --upgrade pip</span><br></pre></td></tr></table></figure>
-        </div>
-        
-        
-        
-    </div>
-</div>
-
-
-
-
-
-
-
-
-    <div class="card">
-    
-	
-    <div class="card-content article ">
-        
-        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
-            <div class="level-left">
-                <time class="level-item has-text-grey" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time>
-                
-                <div class="level-item">
                 <a class="has-link-grey -link" href="/categories/git/">git</a>
                 </div>
                 
@@ -247,6 +202,51 @@
 <h3 id="2-配置别名"><a href="#2-配置别名" class="headerlink" title="2.配置别名"></a>2.配置别名</h3><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git config --global alias.&lt;alias-name&gt; &lt;command-name&gt;</span><br></pre></td></tr></table></figure>
 
 
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+
+
+
+
+
+    <div class="card">
+    
+	
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/linux/">linux</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    1 分钟 读完 (大约 180 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                <a class="has-link-black-ter" href="/2019/07/19/linux升级Python/">Linux升级Python</a>
+            
+        </h1>
+        <div class="content">
+            <figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">rpm -qa | grep java</span><br><span class="line"></span><br><span class="line">rpm -e --nodeps java-1.7.0-openjdk-headless-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.8.0-openjdk-headless-1.8.0.65-3.b17.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.8.0-openjdk-1.8.0.65-3.b17.el7.x86_64</span><br><span class="line">rpm -e --nodeps java-1.7.0-openjdk-1.7.0.91-2.6.2.3.el7.x86_64</span><br><span class="line"></span><br><span class="line">#安装依赖包</span><br><span class="line">yum group install &apos;Development Tools&apos;</span><br><span class="line">yum install gcc-c++ gcc make cmake zlib-devel bzip2-devel openssl-devel ncurse-devel -y</span><br><span class="line"></span><br><span class="line">./configure --prefix=/usr/local/python3 --enable-optimizations</span><br><span class="line"></span><br><span class="line">make &amp;&amp; make install</span><br><span class="line"></span><br><span class="line">mv /usr/bin/python /usr/bin/python.bak</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/python3/bin/python3.7 /usr/bin/python</span><br><span class="line"></span><br><span class="line">ln -s /usr/local/python3/bin/pip3 /usr/bin/pip</span><br><span class="line"></span><br><span class="line">mkdir ~/.pip</span><br><span class="line"></span><br><span class="line">vim ~/.pip/pip.conf</span><br><span class="line"></span><br><span class="line">[global]  </span><br><span class="line">timeout = 6000  </span><br><span class="line">index-url = http://pypi.douban.com/simple/  </span><br><span class="line">[install]  </span><br><span class="line">use-mirrors = true  </span><br><span class="line">mirrors = http://pypi.douban.com/simple/  </span><br><span class="line">trusted-host = pypi.douban.com</span><br><span class="line"></span><br><span class="line">#修改yum</span><br><span class="line">vim /usr/bin/yum</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line">vim /usr/bin/yum-config-manager</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line">vim /usr/libexec/urlgrabber-ext-down</span><br><span class="line">将/usr/bin/python改为/usr/bin/python2.7</span><br><span class="line"></span><br><span class="line">pip install --upgrade pip</span><br></pre></td></tr></table></figure>
         </div>
         
         
@@ -563,25 +563,6 @@
         
         <article class="media">
             
-            <a href="/2019/07/19/linux升级Python/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
-                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
             <a href="/2019/07/19/git命令/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Git基础命令">
@@ -594,6 +575,25 @@
                     <a href="/2019/07/19/git命令/" class="has-link-black-ter is-size-6">Git基础命令</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/git/">git</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/linux升级Python/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
                     </p>
                 </div>
             </div>
@@ -714,25 +714,6 @@
         
         <article class="media">
             
-            <a href="/2019/07/19/linux升级Python/" class="media-left">
-                <p class="image is-64x64">
-                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
-                </p>
-            </a>
-            
-            <div class="media-content">
-                <div class="content">
-                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
-                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
-                    <p class="is-size-7 is-uppercase">
-                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
-                    </p>
-                </div>
-            </div>
-        </article>
-        
-        <article class="media">
-            
             <a href="/2019/07/19/git命令/" class="media-left">
                 <p class="image is-64x64">
                     <img class="thumbnail" src="/images/thumbnail.svg" alt="Git基础命令">
@@ -745,6 +726,25 @@
                     <a href="/2019/07/19/git命令/" class="has-link-black-ter is-size-6">Git基础命令</a>
                     <p class="is-size-7 is-uppercase">
                         <a class="has-link-grey -link" href="/categories/git/">git</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/linux升级Python/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
                     </p>
                 </div>
             </div>
