@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.9.0">
+    <meta charset="utf-8">
+<title>线性回归，岭回归和Lasso回归 - Hexo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+    <meta name="description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+<meta name="keywords" content="machine-learning,python, math">
+<meta property="og:type" content="article">
+<meta property="og:title" content="线性回归，岭回归和Lasso回归">
+<meta property="og:url" content="http://www.motifsing.com/2019/07/19/LinearRegression/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.motifsing.com/images/og_image.png">
+<meta property="og:updated_time" content="2019-07-19T15:38:07.515Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="线性回归，岭回归和Lasso回归">
+<meta name="twitter:description" content="#  线性回归线性回归的一般形式$$\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx\qquad$$ $$损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Bi">
+<meta name="twitter:image" content="http://www.motifsing.com/images/og_image.png">
+
+
+
+
+
+
+
+<link rel="icon" href="/images/favicon.svg">
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.7.2/css/bulma.css">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,600|Source+Code+Pro">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@9.12.0/styles/atom-one-light.css">
+
+
+    
+    
+    
+    <style>body>.footer,body>.navbar,body>.section{opacity:0}</style>
+    
+
+    
+    
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/css/justifiedGallery.min.css">
+    
+
+    
+    
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.css">
+
+
+    
+    
+    
+    
+
+<link rel="stylesheet" href="/css/back-to-top.css">
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+<link rel="stylesheet" href="/css/progressbar.css">
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+    
+    
+    
+
+    
+    
+    
+
+
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="is-3-column">
+    <nav class="navbar navbar-main">
+    <div class="container">
+        <div class="navbar-brand is-flex-center">
+            <a class="navbar-item navbar-logo" href="/">
+            
+                <img src="/images/logo.svg" alt="线性回归，岭回归和Lasso回归" height="28">
+            
+            </a>
+        </div>
+        <div class="navbar-menu">
+            
+            <div class="navbar-start">
+                
+                <a class="navbar-item" href="/">主页</a>
+                
+                <a class="navbar-item" href="/archives">归档</a>
+                
+                <a class="navbar-item" href="/categories">分类</a>
+                
+                <a class="navbar-item" href="/tags">标签</a>
+                
+                <a class="navbar-item" href="/about">关于</a>
+                
+            </div>
+            
+            <div class="navbar-end">
+                
+                    
+                    
+                    <a class="navbar-item" target="_blank" title="Download on GitHub" href="https://github.com/ppoffice/hexo-theme-icarus">
+                        
+                        <i class="fab fa-github"></i>
+                        
+                    </a>
+                    
+                
+                
+                
+                <a class="navbar-item search" title="搜索" href="javascript:;">
+                    <i class="fas fa-search"></i>
+                </a>
+                
+            </div>
+        </div>
+    </div>
+</nav>
+    
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-8-tablet is-8-desktop is-6-widescreen has-order-2 column-main"><div class="card">
+    
+	
+    <div class="card-content article ">
+        
+        <div class="level article-meta is-size-7 is-uppercase is-mobile is-overflow-x-auto">
+            <div class="level-left">
+                <time class="level-item has-text-grey" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time>
+                
+                <div class="level-item">
+                <a class="has-link-grey -link" href="/categories/machine-learning/">machine-learning</a>
+                </div>
+                
+                
+                <span class="level-item has-text-grey">
+                    
+                    
+                    16 分钟 读完 (大约 2415 个字)
+                </span>
+                
+                
+            </div>
+        </div>
+        
+        <h1 class="title is-size-3 is-size-4-mobile has-text-weight-normal">
+            
+                线性回归，岭回归和Lasso回归
+            
+        </h1>
+        <div class="content">
+            <p># </p>
+<h2 id="线性回归"><a href="#线性回归" class="headerlink" title="线性回归"></a>线性回归</h2><h4 id="线性回归的一般形式"><a href="#线性回归的一般形式" class="headerlink" title="线性回归的一般形式"></a>线性回归的一般形式</h4><p>$$<br>\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx<br>\qquad<br>$$</p>
+<p>$$<br>损失函数：J(\theta) = {1 \over 2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^2<br>$$</p>
+<p>$$<br>目标: 求minJ(\theta_0,\theta_1,\dots,\theta_n)时的\theta 值<br>$$</p>
+<h4 id="梯度下降法求解"><a href="#梯度下降法求解" class="headerlink" title="梯度下降法求解"></a>梯度下降法求解</h4><p>$$<br>\begin{alignedat}{2}<br>    \frac{\partial}{\partial\theta_j}J(\theta)=<br>    \frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=1}^m\Big({h_\theta\big({x^{(i)}}\big)-y^{(i)}}\Big)^2\quad\<br>    =\frac{1}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)<br>    \frac{\partial}{\partial\theta_j}(\theta^Tx)\<br>    =\frac{1}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{x_j^{(i)}}\qquad</p>
+<p>\end{alignedat}<br>$$</p>
+<p>$$<br>\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta) \qquad (\alpha{为学习率})\qquad\qquad\qquad\<br>=\theta_j - \frac{\alpha}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{x_j^{(i)}} \qquad(1)<br>$$</p>
+<h6 id="向量化上述公式"><a href="#向量化上述公式" class="headerlink" title="向量化上述公式"></a>向量化上述公式</h6><p>$$<br>\begin{equation}<br>\begin{split}</p>
+<p>&amp;X = \begin{vmatrix}<br>x^{(1)}\<br>x^{(2)}\<br>\dots\<br>x^{(m)}<br>\end{vmatrix}<br>=\begin{vmatrix}<br>x_0^{(1)} &amp; x_1^{(1)} &amp; \dots &amp; x_n^{(1)} \<br>x_0^{(2)} &amp; x_1^{(2)} &amp; \dots &amp; x_n^{(2)} \<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \<br>x_0^{(m)} &amp; x_1^{(m)} &amp; \dots &amp; x_n^{(m)}<br>\end{vmatrix}\<br>&amp;\</p>
+<p>&amp;Y=\begin{vmatrix}<br>y^{(1)}\<br>y^{(2)}\<br>\dots \<br>y^{(m)}<br>\end{vmatrix} \qquad</p>
+<p>\theta=\begin{vmatrix}<br>\theta^{(0)}\<br>\theta^{(1)}\<br>\dots \<br>\theta^{(n)}<br>\end{vmatrix}\<br>&amp;\</p>
+<p>&amp;先求x\cdot\theta并记为A:<br>A=X\cdot\theta=<br>\begin{vmatrix}<br>x_0^{(1)} &amp; x_1^{(1)} &amp; \dots &amp; x_n^{(1)} \<br>x_0^{(2)} &amp; x_1^{(2)} &amp; \dots &amp; x_n^{(2)} \<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \<br>x_0^{(m)} &amp; x_1^{(m)} &amp; \dots &amp; x_n^{(m)}<br>\end{vmatrix} \cdot<br>\begin{vmatrix}<br>\theta^{(0)}\<br>\theta^{(1)}\<br>\dots \<br>\theta^{(n)}<br>\end{vmatrix}<br>=\begin{vmatrix}<br>\theta_0x_0^{(1)}+\theta_1x_1^{(1)}+\dots+\theta_nx_n^{(1)} \<br>\theta_0x_0^{(2)}+\theta_1x_1^{(2)}+\dots+\theta_nx_n^{(2)} \<br>\dots \<br>\theta_0x_0^{(m)}+\theta_1x_1^{(m)}+\dots+\theta_nx_n^{(m)} \<br>\end{vmatrix}\<br>&amp;\</p>
+<p>&amp;求h\theta(x)-y并记为E:\<br>&amp;E = h_\theta(x)-Y=<br>\begin{vmatrix}<br>g(A^{(1)}) - y^{(1)} \<br>g(A^{(2)}) - y^{(2)} \<br>\dots \<br>g(A^{(m)}) - y^{(m)} \<br>\end{vmatrix}=<br>\begin{vmatrix}<br>e^{(1)} \<br>e^{(2)} \<br>\dots \<br>e^{(m)}<br>\end{vmatrix}<br>=g(A) - Y \<br>&amp;\</p>
+<p>\end{split}<br>\end{equation}<br>$$</p>
+<p>​<br>$$<br>\begin{equation}<br>\begin{split}</p>
+<p>&amp;\color{red}把上述公式代入公式(1)中 \<br>&amp;\<br>&amp;\theta_0 := \theta_0 - \frac{\alpha}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{x_0^{(i)}} \<br>&amp;=\theta_0 - \frac{\alpha}{m}\sum_{i=1}^me^{(i)}x_0^{(i)} \<br>&amp;=\theta_0 - \frac{\alpha}{m}\cdot(x_0^{(1)},x_0^{(2)},\dots,x_0^{(m)})\cdot{E} \<br>&amp;\</p>
+<p>&amp;同样的可以写出\theta_j, \<br>&amp;\theta_j :=\theta_j - \frac{\alpha}{m}\cdot(x_j^{(1)},x_j^{(2)},\dots,x_j^{(m)})\cdot{E}\<br>&amp;\</p>
+<p>&amp;综合起来 \<br>&amp;\begin{vmatrix}<br>\theta^{(0)}\<br>\theta^{(1)}\<br>\dots \<br>\theta^{(n)}<br>\end{vmatrix}<br>:=\begin{vmatrix}<br>\theta^{(0)}\<br>\theta^{(1)}\<br>\dots \<br>\theta^{(n)}<br>\end{vmatrix}<br>-\frac{\alpha}{m}\cdot<br>\begin{vmatrix}<br>x_0^{(1)},x_0^{(2)},\dots,x_0^{(m)} \<br>x_1^{(1)},x_1^{(2)},\dots,x_1^{(m)} \<br>\dots \<br>x_n^{(1)},x_n^{(2)},\dots,x_n^{(m)}<br>\end{vmatrix}<br>\cdot{E}<br>=\theta - \frac{\alpha}{m}\cdot{X^T}\cdot{E}<br>\qquad \qquad \qquad \qquad \qquad \qquad \qquad \qquad </p>
+<p>\end{split}<br>\end{equation}<br>$$</p>
+<p>$$<br>\begin{equation}<br>\begin{split}<br>&amp;综上所述，vectorization后\theta更新的步骤 \<br>&amp;(1) 求A=X\cdot\theta \<br>&amp;(2) 求E=g(A)-Y \<br>&amp;(3) 求\theta:=\theta-\alpha\cdot{X}^T\cdot{E} \<br>&amp;综合起来 \<br>&amp;\theta := \theta-\alpha\cdot(\frac{1}{m})\cdot{X^T}\cdot\Big(g(X\cdot\theta)-Y\Big)\<br>&amp;\quad=\theta - \frac{\alpha}{m}\cdot{X^T}\cdot(X\theta-Y)</p>
+<p>\end{split}<br>\end{equation}<br>$$</p>
+<h4 id="正规方程求解"><a href="#正规方程求解" class="headerlink" title="正规方程求解"></a>正规方程求解</h4><p>$$<br>\color{black} \large 通过求解\frac{\partial}{\partial\theta_j}J(\theta)=0的方式来求出使得损失函数最小情况下为0时的\theta值<br>$$</p>
+<p>$$<br>\begin{equation}<br>\begin{split}</p>
+<p>&amp;\frac{\partial}{\partial\theta_j}J(\theta)=0 \<br>&amp;\<br>&amp;J(\theta) = \frac{1}{2m}(X\cdot\theta-Y)^T(X\cdot\theta-Y) \<br>&amp;\qquad=\frac{1}{2m}(Y^TY-Y^TX\theta-\theta^TX^TY+\theta^Tx^TX\theta)\<br>&amp;\<br>&amp;对J(\theta)进行求导 \<br>&amp;\<br>&amp;\frac{\partial}{\partial\theta_j}J(\theta)=\frac{1}{2m}(\frac{\partial{Y^T}Y}{\partial\theta}-\frac{\partial{Y^T}X\theta}{\partial\theta}-\frac{\partial{\theta^TX^T}Y}{\partial\theta}-\frac{\partial\theta^TX^TX\theta}{\partial\theta})\<br>&amp;\<br>&amp;\large\color{red}求导公式:\<br>&amp;\<br>&amp;\frac{dAB}{dB} = A^T; \qquad \frac{dX^TAX}{dX}=2AX \<br>&amp;\<br>&amp;(求导第一项)\<br>&amp;\<br>&amp;\qquad\frac{\partial{Y^T}Y}{\partial\theta}=0 \<br>&amp;\<br>&amp;(求导第二项)\<br>&amp;\qquad Y^TX\theta=\begin{vmatrix}y^{(1)},y^{(2)},\dots,y^{(m)}\end{vmatrix}<br>\begin{vmatrix}<br>x_0^{(1)} &amp; x_1^{(1)} &amp; \dots &amp; x_n^{(1)} \<br>x_0^{(2)} &amp; x_1^{(2)} &amp; \dots &amp; x_n^{(2)} \<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \<br>x_0^{(m)} &amp; x_1^{(m)} &amp; \dots &amp; x_n^{(m)}<br>\end{vmatrix}<br>\begin{vmatrix}<br>\theta^{(0)},\theta^{(1)}, \dots, \theta^{(n)}<br>\end{vmatrix}^T\<br>&amp;\<br>&amp;\qquad\qquad\quad=(x_0^{(1)}y^{(1)}+\dots+x_0^{(m)}y^{(m)})\theta_0 + (x_1{(1)}y^{(1)}+\dots+x_1{(m)}y^{(m)})\theta_1 + \dots + (x_n{(1)}y^{(1)}+\dots+x_n{(m)}y^{(m)})\theta_n\<br>&amp;\<br>&amp;\qquad\frac{\partial{Y^TX\theta}}{\partial\theta}<br>=\begin{vmatrix}<br>\frac{\partial{Y^TX\theta}}{\partial\theta_0} \<br>\dots \<br>\frac{\partial{Y^TX\theta}}{\partial\theta_n}<br>\end{vmatrix}<br>=\begin{vmatrix}<br>x_0^{(1)}y^{(1)}+\dots+x_0^{(m)}y^{(m)} \<br>\dots \<br>x_n^{(1)}y^{(1)}+\dots+x_n^{(m)}y^{(m)}<br>\end{vmatrix}<br>=X^TY \<br>&amp;\<br>&amp;(求导第三项)\<br>&amp; \<br>&amp;\qquad\theta^TX^TY=<br>\begin{vmatrix}<br>\theta^{(0)}, \theta^{(1)}, \dots, \theta^{(n)}<br>\end{vmatrix}<br>\begin{vmatrix}<br>x_0^{(1)} &amp; x_1^{(1)} &amp; \dots &amp; x_n^{(1)} \<br>x_0^{(2)} &amp; x_1^{(2)} &amp; \dots &amp; x_n^{(2)} \<br>\dots &amp; \dots &amp; \dots &amp; \dots &amp; \<br>x_0^{(m)} &amp; x_1^{(m)} &amp; \dots &amp; x_n^{(m)}<br>\end{vmatrix}^T<br>\begin{vmatrix}y^{(1)},y^{(2)},\dots,y^{(m)}\end{vmatrix}^T \<br>&amp; \<br>&amp;\qquad\qquad\quad=<br>(x_0^{(1)}\theta_0+\dots+x_n^{(1)}\theta_n)y^{(1)} + (x_0^{(2)}\theta_0+\dots+x_n^{(2)}\theta_n)y^{(2)} + \dots +(x_0^{(m)}\theta_0+\dots+x_n^{(m)}\theta_n)y^{(m)} \<br>&amp;\<br>&amp;该矩阵求导为分母布局下的标量/向量形式：\<br>&amp;\<br>&amp;\qquad\frac{\partial\theta^TX^TY}{\partial\theta}<br>=\begin{vmatrix}<br>\frac{\partial\theta^TX^TY}{\partial\theta_0} \<br>\dots \<br>\frac{\partial\theta^TX^TY}{\partial\theta_n}<br>\end{vmatrix}<br>=\begin{vmatrix}<br>x_0^{(1)}y^{(1)}+\dots+x_0^{(m)}y^{(m)} \<br>\dots \<br>x_n^{(1)}y^{(1)}+\dots+x_n^{(m)}y^{(m)}<br>\end{vmatrix}<br>=X^TY \<br>&amp;\<br>&amp;(求导第四项)\<br>&amp; \<br>&amp;\qquad \theta^TX^TX\theta = (X^TX)(\theta_0^2 + \theta_1^2 + \dots + \theta_n^2) \<br>&amp; \<br>&amp; 其中\theta^TX^TX\theta为标量，可看成一个常数，矩阵求导为分母布局下的标量/向量形式：\<br>&amp; \<br>&amp;\qquad \frac{\partial\theta^TX^TX\theta}{\partial\theta}<br>= \begin{vmatrix}<br>\frac{\partial\theta^TX^TX\theta}{\partial\theta_0} \<br>\dots \<br>\frac{\partial\theta^TX^TX\theta}{\partial\theta_n}<br>\end{vmatrix}<br>= 2(X^TX)<br>\begin{vmatrix}<br>\theta^{(0)}\<br>\theta^{(1)}\<br>\dots \<br>\theta^{(n)}<br>\end{vmatrix}<br>=2X^TX\theta \<br>&amp;\<br>&amp;综上，正规方程为：\<br>&amp; \<br>&amp;\qquad \frac{1}{2m}(-2X^TY + 2X^TX\theta) = 0<br>&amp;\<br>&amp;特征参数表示如下：\<br>&amp;\<br>&amp;\qquad \theta=(X^TX)^{-1}X^Ty=0 \qquad(X为m*(n+1)矩阵) \</p>
+<p>\end{split}<br>\end{equation}<br>$$</p>
+<h2 id="岭回归与Lasso回归"><a href="#岭回归与Lasso回归" class="headerlink" title="岭回归与Lasso回归"></a>岭回归与Lasso回归</h2><h4 id="岭回归的一般形式"><a href="#岭回归的一般形式" class="headerlink" title="岭回归的一般形式"></a>岭回归的一般形式</h4><p>$$<br>\tag{x是向量}假设函数：h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \dots +\theta_nx_n=\theta^Tx<br>$$</p>
+<p>$$<br>岭回归的损失函数：J(\theta)=\frac{1}{2m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)^2 + \lambda \sum_{j=1}^n\theta_j^2 \quad<br>$$</p>
+<p>$$<br>Lasso回归的损失函数：J(\theta)={1 \over 2m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)^2 + \lambda\sum_{j=1}^n|\theta_j|<br>$$</p>
+<p>$$<br>目标: 求minJ(\theta_0,\theta_1,\dots,\theta_n)时的\theta 值<br>$$</p>
+<p>$$<br>\color{red} \Big (其中\lambda为正则化参数，因为不对\theta_0进行惩罚，所以J的值是从1开始)<br>$$</p>
+<figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">岭回归与Lasso回归最大的区别在于岭回归引入的是L2范数惩罚项，Lasso回归引入的是L1范数惩罚项，Lasso回归能够使得损失函数中的许多θ均变成0，这点要优于岭回归，因为岭回归是要所有的θ均存在的，这样计算量Lasso回归将远远小于岭回归。</span><br></pre></td></tr></table></figure>
+
+<h4 id="岭回归梯度下降法"><a href="#岭回归梯度下降法" class="headerlink" title="岭回归梯度下降法"></a>岭回归梯度下降法</h4><p>$$<br>\frac{\partial}{\partial\theta_j}J(\theta) = \frac{\partial}{\partial\theta_j}\cdot\frac{1}{2m}\Bigg[\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)^2 + \lambda \sum_{j=1}^n\theta_j^2 \Bigg]\<br>=\frac{1}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{X_j^{(i)}} + \frac{\lambda}{m}\theta_j\tag{1}<br>$$</p>
+<p>$$<br>\color{red} \Large \bf {因为\theta_0不参与惩罚，因而分为两部分\qquad\quad}<br>$$</p>
+<p>$$<br>\theta_0 := \theta_0 - \alpha\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)X_0^{(i)}\tag{2}<br>$$</p>
+<p>$$<br>\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta)\tag{3}<br>$$</p>
+<p>$$<br>{把(1)带入(3)中}:\<br>\theta_j := \theta_j - \frac{\alpha}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{X_j}^{(i)} - \frac{\alpha\lambda}{m}\theta_j\<br>:= (1 - \frac{\alpha\lambda}{m})\theta_j - \frac{\alpha}{m}\sum_{i=1}^m\Big(h_\theta\big(x^{(i)}\big)-y^{(i)}\Big)\cdot{X_j^{(i)}}\<br>若m训练样本较大时，\frac{\lambda}{m}趋向于0，则每次均会进行微调<br>$$</p>
+<h4 id="正规方程求解法"><a href="#正规方程求解法" class="headerlink" title="正规方程求解法"></a>正规方程求解法</h4><p>$$<br>\theta = \Biggr(X^TX + \lambda\begin{vmatrix}<br>   0 &amp;  &amp;  &amp;  &amp;  \<br>    &amp; 1 &amp;  &amp;  &amp;  \<br>    &amp;  &amp; . &amp;  &amp;  \<br>    &amp;  &amp;  &amp; . &amp;  \<br>    &amp;  &amp;  &amp;  &amp; 1 \<br>\end{vmatrix}\Biggr)^{-1}\cdot{X^T}y<br>$$</p>
+<h4 id="可能存在的问题"><a href="#可能存在的问题" class="headerlink" title="可能存在的问题"></a>可能存在的问题</h4><figure class="highlight plain hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1：过拟合问题</span><br><span class="line">	a.通过正则化（特征缩放）方式来避免</span><br><span class="line">		1.提升模型的收敛速度</span><br><span class="line">		2.提升模型的精度</span><br><span class="line">	b.丢弃一些对我们最终预测结果影响不大的特征，具体哪些特征需要丢弃可以通过PCA算法来实现</span><br><span class="line">2：学习率α的选择</span><br><span class="line">	a.选取过小，导致迭代次数变多，收敛速度变慢</span><br><span class="line">	b.选取过大，有可能跳过最优解，最终导致无法收敛</span><br><span class="line">3：X^T*X有可能是奇异矩阵</span><br><span class="line">	1.特征量之间存在线性相关性（丢弃一些不必要的特征变量）</span><br><span class="line">	2.特征量的个数大于样本个数（增加样本数量，通过正则化数据，加入系数惩罚项）</span><br></pre></td></tr></table></figure>
+
+<p>$$<br>X^TX + \lambda\begin{vmatrix}<br>   0 &amp;  &amp;  &amp;  &amp;  \<br>    &amp; 1 &amp;  &amp;  &amp;  \<br>    &amp;  &amp; . &amp;  &amp;  \<br>    &amp;  &amp;  &amp; . &amp;  \<br>    &amp;  &amp;  &amp;  &amp; 1 \<br>\end{vmatrix}可证明其不可能是奇异矩阵或者退化矩阵，解决一般线性回归正规方程解中出现的奇异矩阵<br>$$</p>
+<h4 id="知识点总结"><a href="#知识点总结" class="headerlink" title="知识点总结"></a>知识点总结</h4><p>$$<br>\color{blue}<br>\begin{equation}<br>\begin{split}<br>&amp;1. 梯度下降法优化：特征缩放 令x_n = \frac{x_n-\mu_n}{s_n} \qquad （s_n为最大值减去最小值）\<br>&amp;2. 学习率\alpha的选择可考虑为：0.01，0.03，0.1，0.3，1.3 \<br>&amp;3. 绘制损失函数和迭代次数的图像来观测何时收敛 \<br>&amp;4. 线性回归的衍生版，把多项式转化为线性回归的方式，然后进行特征缩放<br>\end{split}<br>\end{equation}<br>$$</p>
+<h6 id="python代码实现"><a href="#python代码实现" class="headerlink" title="python代码实现"></a>python代码实现</h6><figure class="highlight python hljs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">LinearRegression</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">__init__</span><span class="hljs-params">(self)</span>:</span></span><br><span class="line">        self._theta = <span class="hljs-literal">None</span></span><br><span class="line">        self.coef_ = <span class="hljs-literal">None</span></span><br><span class="line">        self.intercept_ = <span class="hljs-literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 正规方程解</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">normal_equation</span><span class="hljs-params">(self, X_train, y_train)</span>:</span></span><br><span class="line">        <span class="hljs-comment"># np.hstack 行合并两个矩阵, np.linalg.inv计算矩阵的逆</span></span><br><span class="line">        X_b = np.hstack((np.ones((len(X_train), <span class="hljs-number">1</span>)), X_train))</span><br><span class="line">        self._theta = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y_train)</span><br><span class="line">        self.intercept_ = self._theta[<span class="hljs-number">0</span>]</span><br><span class="line">        self.coef_ = self._theta[<span class="hljs-number">1</span>:]</span><br><span class="line">        <span class="hljs-keyword">return</span> self</span><br><span class="line"></span><br><span class="line">    <span class="hljs-comment"># 均值归一化处理数据</span></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">mean_normalization</span><span class="hljs-params">(self, data)</span>:</span></span><br><span class="line">        <span class="hljs-string">"""均值归一化数据,特征变量的值减去变量的均值然后除以该变量的最大值与最小值的差值"""</span></span><br><span class="line">        <span class="hljs-keyword">return</span> (data - data.mean(axis=<span class="hljs-number">0</span>))/(data.max(axis=<span class="hljs-number">0</span>) - data.min(axis=<span class="hljs-number">0</span>))</span><br><span class="line"></span><br><span class="line">    <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">fit_gd</span><span class="hljs-params">(self, X_train, y_train, alpha=<span class="hljs-number">0.01</span>, deviation=<span class="hljs-number">1e-8</span>, max_item=<span class="hljs-number">1e4</span>)</span>:</span></span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">assert</span> len(X_train) == len(y_train), \</span><br><span class="line">            <span class="hljs-string">"""The number of samples for X_train should be equal to the number of samples for y_train."""</span></span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment"># 损失函数</span></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">J</span><span class="hljs-params">(theta, X_b, y)</span>:</span></span><br><span class="line">            <span class="hljs-keyword">return</span> np.sum((y - X_b.dot(theta)) ** <span class="hljs-number">2</span>) / <span class="hljs-number">2</span>*len(X_b)</span><br><span class="line"></span><br><span class="line">        <span class="hljs-comment"># 对theta求导</span></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">dJ</span><span class="hljs-params">(theta, X_b, y)</span>:</span></span><br><span class="line">            <span class="hljs-keyword">return</span> X_b.T.dot((X_b.dot(theta)-y))/len(X_b)</span><br><span class="line"></span><br><span class="line">        <span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">gradient_descent</span><span class="hljs-params">(initial_theta, X_b, y, deviation=<span class="hljs-number">1e-8</span>, max_item=<span class="hljs-number">1e4</span>)</span>:</span></span><br><span class="line">            theta = initial_theta</span><br><span class="line">            item_num = <span class="hljs-number">0</span></span><br><span class="line">            <span class="hljs-keyword">while</span> item_num &lt;= max_item:</span><br><span class="line">                res = dJ(theta, X_b, y)</span><br><span class="line">                last_theta = theta</span><br><span class="line">                theta = theta - alpha*res</span><br><span class="line">                <span class="hljs-keyword">if</span> abs(J(theta, X_b, y) - J(last_theta, X_b, y)) &lt;= deviation:</span><br><span class="line">                    <span class="hljs-keyword">break</span></span><br><span class="line">                item_num += <span class="hljs-number">1</span></span><br><span class="line"></span><br><span class="line">            <span class="hljs-keyword">return</span> theta</span><br><span class="line"></span><br><span class="line">        X_b = np.hstack((np.ones((len(X_train), <span class="hljs-number">1</span>)), X_train))</span><br><span class="line">        initial_theta = np.zeros(X_b.shape[<span class="hljs-number">1</span>])</span><br><span class="line"></span><br><span class="line">        self._theta = gradient_descent(initial_theta, X_b, y_train, deviation, max_item)</span><br><span class="line">        self.coef_ = self._theta[<span class="hljs-number">1</span>:]</span><br><span class="line">        self.intercept_ = self._theta[<span class="hljs-number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="hljs-keyword">return</span> self</span><br></pre></td></tr></table></figure>
+
+
+        </div>
+        
+        <div class="level is-size-7 is-uppercase">
+            <div class="level-start">
+                <div class="level-item">
+                    <span class="is-size-6 has-text-grey has-mr-7">#</span>
+                    <a class="has-link-grey -link" href="/tags/machine-learning/">machine-learning</a>, <a class="has-link-grey -link" href="/tags/python-math/">python, math</a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+    </div>
+</div>
+
+
+
+<div class="card">
+    <div class="card-content">
+        <h3 class="menu-label has-text-centered">喜欢这篇文章？打赏一下作者吧</h3>
+        <div class="buttons is-centered">
+            
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Alipay. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>qrcode</code> for Wechat. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                <!-- Visit https://www.paypal.com/donate/buttons/ to get your donate button -->
+
+<div class="notification is-danger">
+    You forgot to set the <code>business</code> and <code>currency_code</code> for Paypal. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+                
+<div class="notification is-danger">
+    You forgot to set the <code>url</code> Patreon. Please set it in <code>_config.yml</code>.
+</div>
+
+                
+        </div>
+    </div>
+</div>
+
+
+
+<div class="card card-transparent">
+    <div class="level post-navigation is-flex-wrap is-mobile">
+        
+        <div class="level-start">
+            <a class="level level-item has-link-grey  article-nav-prev" href="/2019/07/19/linux升级Python/">
+                <i class="level-item fas fa-chevron-left"></i>
+                <span class="level-item">Linux升级Python</span>
+            </a>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+</div>
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen  has-order-1 column-left ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <nav class="level">
+            <div class="level-item has-text-centered" style="flex-shrink: 1">
+                <div>
+                    
+                        <img class="image is-128x128 has-mb-6" src="/images/avatar.png" alt="Your name">
+                    
+                    
+                    <p class="is-size-4 is-block">
+                        Your name
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-block">
+                        Your title
+                    </p>
+                    
+                    
+                    <p class="is-size-6 is-flex is-flex-center has-text-grey">
+                        <i class="fas fa-map-marker-alt has-mr-7"></i>
+                        <span>Your location</span>
+                    </p>
+                    
+                </div>
+            </div>
+        </nav>
+        <nav class="level is-mobile">
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        文章
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        分类
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        3
+                    </p>
+                </div>
+            </div>
+            <div class="level-item has-text-centered is-marginless">
+                <div>
+                    <p class="heading">
+                        标签
+                    </p>
+                    <p class="title has-text-weight-normal">
+                        5
+                    </p>
+                </div>
+            </div>
+        </nav>
+        <div class="level">
+            <a class="level-item button is-link is-rounded" href="https://github.com/ppoffice" target="_blank">
+                关注我</a>
+        </div>
+        
+        
+        <div class="level is-mobile">
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Github" href="https://github.com/motifsing">
+                
+                <i class="fab fa-github"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Facebook" href="https://facebook.com">
+                
+                <i class="fab fa-facebook"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Twitter" href="https://twitter.com">
+                
+                <i class="fab fa-twitter"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="Dribbble" href="https://dribbble.com">
+                
+                <i class="fab fa-dribbble"></i>
+                
+            </a>
+            
+            <a class="level-item button is-white is-marginless" target="_blank" title="RSS" href="/atom.xml">
+                
+                <i class="fas fa-rss"></i>
+                
+            </a>
+            
+        </div>
+        
+    </div>
+</div>
+    
+        
+    
+        
+
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            链接
+        </h3>
+        <ul class="menu-list">
+        
+            <li>
+                <a class="level is-mobile" href="https://hexo.io" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">Hexo</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">hexo.io</span>
+                    </span>
+                </a>
+            </li>
+        
+            <li>
+                <a class="level is-mobile" href="https://github.com/ppoffice" target="_blank">
+                    <span class="level-left">
+                        <span class="level-item">PPOffice</span>
+                    </span>
+                    <span class="level-right">
+                        <span class="level-item tag">github.com</span>
+                    </span>
+                </a>
+            </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+
+
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                分类
+            </h3>
+            <ul class="menu-list">
+            <li>
+        <a class="level is-marginless" href="/categories/git/">
+            <span class="level-start">
+                <span class="level-item">git</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/linux/">
+            <span class="level-start">
+                <span class="level-item">linux</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li><li>
+        <a class="level is-marginless" href="/categories/machine-learning/">
+            <span class="level-start">
+                <span class="level-item">machine-learning</span>
+            </span>
+            <span class="level-end">
+                <span class="level-item tag">1</span>
+            </span>
+        </a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            标签云
+        </h3>
+        <a href="/tags/git/" style="font-size: 10px;">git</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/machine-learning/" style="font-size: 10px;">machine-learning</a> <a href="/tags/python/" style="font-size: 10px;">python</a> <a href="/tags/python-math/" style="font-size: 10px;">python, math</a>
+    </div>
+</div>
+
+    
+    
+        <div class="column-right-shadow is-hidden-widescreen ">
+        
+            
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/git命令/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Git基础命令">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/git命令/" class="has-link-black-ter is-size-6">Git基础命令</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/git/">git</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/linux升级Python/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/LinearRegression/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="线性回归，岭回归和Lasso回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/LinearRegression/" class="has-link-black-ter is-size-6">线性回归，岭回归和Lasso回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/machine-learning/">machine-learning</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+        
+            <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/git/">
+                        <span class="tag">git</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/linux/">
+                        <span class="tag">linux</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/machine-learning/">
+                        <span class="tag">machine-learning</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python-math/">
+                        <span class="tag">python, math</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+        
+        </div>
+    
+</div>
+
+                
+
+
+
+
+<div class="column is-4-tablet is-4-desktop is-3-widescreen is-hidden-touch is-hidden-desktop-only has-order-3 column-right ">
+    
+        
+<div class="card widget">
+    <div class="card-content">
+        <h3 class="menu-label">
+            最新文章
+        </h3>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/git命令/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Git基础命令">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/git命令/" class="has-link-black-ter is-size-6">Git基础命令</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/git/">git</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/linux升级Python/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="Linux升级Python">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/linux升级Python/" class="has-link-black-ter is-size-6">Linux升级Python</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/linux/">linux</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+        <article class="media">
+            
+            <a href="/2019/07/19/LinearRegression/" class="media-left">
+                <p class="image is-64x64">
+                    <img class="thumbnail" src="/images/thumbnail.svg" alt="线性回归，岭回归和Lasso回归">
+                </p>
+            </a>
+            
+            <div class="media-content">
+                <div class="content">
+                    <div><time class="has-text-grey is-size-7 is-uppercase" datetime="2019-07-18T16:00:00.000Z">2019-07-19</time></div>
+                    <a href="/2019/07/19/LinearRegression/" class="has-link-black-ter is-size-6">线性回归，岭回归和Lasso回归</a>
+                    <p class="is-size-7 is-uppercase">
+                        <a class="has-link-grey -link" href="/categories/machine-learning/">machine-learning</a>
+                    </p>
+                </div>
+            </div>
+        </article>
+        
+    </div>
+</div>
+
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+        <h3 class="menu-label">
+            归档
+        </h3>
+        <ul class="menu-list">
+        
+        <li>
+            <a class="level is-marginless" href="/archives/2019/07/">
+                <span class="level-start">
+                    <span class="level-item">七月 2019</span>
+                </span>
+                <span class="level-end">
+                    <span class="level-item tag">3</span>
+                </span>
+            </a>
+        </li>
+        
+        </ul>
+        </div>
+    </div>
+</div>
+    
+        <div class="card widget">
+    <div class="card-content">
+        <div class="menu">
+            <h3 class="menu-label">
+                标签
+            </h3>
+            <div class="field is-grouped is-grouped-multiline">
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/git/">
+                        <span class="tag">git</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/linux/">
+                        <span class="tag">linux</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/machine-learning/">
+                        <span class="tag">machine-learning</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python/">
+                        <span class="tag">python</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+                <div class="control">
+                    <a class="tags has-addons" href="/tags/python-math/">
+                        <span class="tag">python, math</span>
+                        <span class="tag is-grey">1</span>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+    
+    
+</div>
+
+            </div>
+        </div>
+    </section>
+    <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2019 yhw<br>
+               <!-- 首先引入统计用的js，然后编写相应的统计代码 -->
+               <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+               访问量<span id="busuanzi_value_site_pv"></span>次  <i class="fa fa-user-md"></i>  访客数<span id="busuanzi_value_site_uv"></span>人
+               <!-- 注释掉Powered by，Theme by的显示。-->
+               <!-- Powered by <a href="http://blog.kimzing.com/" target="_blank">Kim</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a> -->
+        </div>
+    </div>
+</footer>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment@2.22.2/min/moment-with-locales.min.js"></script>
+<script>moment.locale("zh-CN");</script>
+
+
+    
+    
+    
+    <script src="/js/animation.js"></script>
+    
+
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@1.6.8/dist/js/lightgallery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js" defer></script>
+    <script src="/js/gallery.js" defer></script>
+    
+
+    
+    
+
+<div id="outdated">
+    <h6>Your browser is out-of-date!</h6>
+    <p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update
+            my browser now </a></p>
+    <p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/outdatedbrowser@1.1.5/outdatedbrowser/outdatedbrowser.min.js" defer></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        outdatedBrowser({
+            bgColor: '#f25648',
+            color: '#ffffff',
+            lowerThan: 'flex'
+        });
+    });
+</script>
+
+
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.5/unpacked/MathJax.js?config=TeX-MML-AM_CHTML" defer></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    MathJax.Hub.Config({
+        'HTML-CSS': {
+            matchFontHeight: false
+        },
+        SVG: {
+            matchFontHeight: false
+        },
+        CommonHTML: {
+            matchFontHeight: false
+        },
+        tex2jax: {
+            inlineMath: [
+                ['$','$'],
+                ['\\(','\\)']
+            ]
+        }
+    });
+});
+</script>
+
+    
+    
+
+<a id="back-to-top" title="回到顶端" href="javascript:;">
+    <i class="fas fa-chevron-up"></i>
+</a>
+<script src="/js/back-to-top.js" defer></script>
+
+
+    
+    
+
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/clipboard@2.0.4/dist/clipboard.min.js" defer></script>
+    <script src="/js/clipboard.js" defer></script>
+    
+
+    
+    
+    
+
+
+<script src="/js/main.js" defer></script>
+
+    
+    <div class="searchbox ins-search">
+    <div class="searchbox-container ins-search-container">
+        <div class="searchbox-input-wrapper">
+            <input type="text" class="searchbox-input ins-search-input" placeholder="想要查找什么...">
+            <span class="searchbox-close ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="searchbox-result-wrapper ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+    (function (window) {
+        var INSIGHT_CONFIG = {
+            TRANSLATION: {
+                POSTS: '文章',
+                PAGES: '页面',
+                CATEGORIES: '分类',
+                TAGS: '标签',
+                UNTITLED: '(无标题)',
+            },
+            CONTENT_URL: '/content.json',
+        };
+        window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+    })(window);
+</script>
+<script src="/js/insight.js" defer></script>
+<link rel="stylesheet" href="/css/search.css">
+<link rel="stylesheet" href="/css/insight.css">
+    
+</body>
+</html>
